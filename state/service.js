@@ -101,15 +101,18 @@ Service.prototype.initialize = function() {
       return this;
     },
     request: function() {
-      var args = norma('s?, o?, .*', arguments);
+      var args = norma('path:s?, opts:o?, cb:f?', arguments);
+      var cb   = args.cb || null;
+      var opts = args.opts || {};
+      var path = args.path || opts.url || opts.uri;
 
-      args[0] = {
-        uri: this.uri.requestUrl(args[0]),
-        json: true
-      };
+      opts.uri = this.uri.requestUrl(path);
+      opts.url = null;
+
+      _.defaults(opts, { json: true });
 
       debug('request on service: %s, %o', this.name, args);
-      return request.apply(request, args);
+      return request.apply(request, _.compact([opts, cb]));
     },
 
     use: function() {

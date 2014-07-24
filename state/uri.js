@@ -77,10 +77,20 @@ Uri.prototype.initialize = function() {
     },
 
     // append the request path.
-    requestUrl: function(_path) {
+    requestUrl: function() {
+      var args = norma('path:s? opts:o?', arguments);
+      var path = args.path || '';
+      var opts = args.opts || {};
+
       var _url = _.clone(this.url);
-      var _path = (_path || '').replace(/^\//, '');
+
+      _.defaults(_url, opts);
+
+      var _path = opts.path || opts.pathname || path;
+      _path = _path.replace(/^\//, '');
+
       _url.path = _url.pathname = this._joinPath(_url.path, _path);
+
       return url.format(_url);
     },
     _joinPath: function() {

@@ -31,6 +31,9 @@ Service.createInstance = function(name) {
       return fn;
     };
   });
+
+  fn.requestUrl = _service.uri.requestUrl.bind(_service.uri);
+
   return fn;
 };
 

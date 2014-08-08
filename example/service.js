@@ -18,7 +18,6 @@
 *   * Gallery service, mounted at /gallery on the example service.
 *   * Event service, hosted on a remote HTTP server.
 *   * MongoDB store service, hosted on a local socket.
-*   * Post listing API endpoint, using mongo, on a local socket.
 *
 * For configuration :
 *
@@ -26,10 +25,9 @@
 * default to hardcoded strings.
 */
 
-
-
 // Return a new instance of Waif.
 var waif = require('waif')();
+var redirect = require('waif/redirect');
 
 // Configuration.
 var PORT = process.env.PORT || 3000;
@@ -37,22 +35,17 @@ var SOCKET = process.env.SOCKET || '/tmp/sockets/test-data.sock';
 var MONGO_URL = process.env.MONGO_URL || "mongodb://localhost:27017/test";
 var EVENT_URL = process.env.EVENT_URL || 'http://event.example.com';
 
+var mongoStore = require('waif-mongo-store');
+var mongoConfig = { url: MONGO_URL };
+
 // Declaring internally used service.
 waif('store')                               // data access service.
-  .use(require('waif-mongo-store'))         // uses mongo as a data store.
-  .config({url: MONGO_URL})                 // mongo db configuration.
-  .listen(SOCKET);                          // custom domain socket file.
-
-// Same, but from a local include instead of npm.
-waif('post-list')                           // custom data service.
-  .use(require('./src/post-list'))          // uses a relative require.
-  .config({url: MONGO_URL})                 // mongo db configuration.
-  .listen();                                // random domain socket file.
+  .use(mongoStore(mongoConfig))             // uses mongo as a data store.
+  .listen();                                // random socket file.
 
 // Declaring an external REST api.
 waif('event')                               // event logging service.
-  .config({ source: 'service:embed' })      // event source defaulted.
-  .forward(EVENT_URL);                      // all requests directed here.
+  .use(redirect(EVENT_URL));                // all requests directed here.
 
 // Declaring a service to be mounted on another one.
 // From a relative submodule, with it's own views.

@@ -121,8 +121,7 @@ Service.prototype.initialize = function() {
       debug('use middlware on service: %s', this.name);
       return this;
     },
-    mount: noopFn,
-    config: noopFn
+    mount: noopFn
 
   });
 };

@@ -46,6 +46,5 @@ describe('Service instances', function() {
     should.exist(this.instance.forward);
     should.exist(this.instance.use);
     should.exist(this.instance.listen);
-    should.exist(this.instance.config);
   });
 });

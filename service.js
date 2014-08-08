@@ -22,7 +22,7 @@ Service.createInstance = function(name) {
   fn.instance = _service;
 
   var proxyMethods = [
-    'request', 'forward', 'listen', 'use', 'start', 'stop', 'on', 'config'
+    'request', 'forward', 'listen', 'use', 'start', 'stop', 'on'
   ];
 
   _(proxyMethods).each(function(method) {

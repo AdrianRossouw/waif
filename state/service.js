@@ -6,8 +6,8 @@ var debug        = require('debug')('waif:state:service');
 var EventEmitter = require('events').EventEmitter;
 var request      = require('request');
 var norma        = require('norma');
-var state = require('state');
-var assert = require('assert');
+var state        = require('state');
+var assert       = require('assert');
 var express      = require('express');
 var util         = require('util');
 

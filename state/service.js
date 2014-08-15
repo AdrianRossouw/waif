@@ -21,14 +21,15 @@ var Status       = require('./status');
 * services that have been mounted onto the
 * system.
 */
-function Service(name) {
+function Service(waif, name) {
   debug('new service: %s', name);
   assert(name, "service not supplied with name");
 
-  this.name                       = name;
-  this.middleware                 = [];
-  this.uri                        = new Uri();
-  this.status                     = new Status();
+  this.waif       = waif;
+  this.name       = name;
+  this.middleware = [];
+  this.uri        = new Uri();
+  this.status     = new Status();
 
   this.initialize();
 
@@ -116,7 +117,7 @@ Service.prototype.initialize = function() {
     },
 
     use: function() {
-      var args = norma('s?, f}', arguments);
+      var args = norma('s?, f, o?}', arguments);
       this.middleware.push(_.compact(args));
       debug('use middlware on service: %s', this.name);
       return this;

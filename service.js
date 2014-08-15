@@ -10,8 +10,8 @@ var Service      = require('./state/service');
 // to allow you to get notifications of
 // start, stop and configure.
 
-Service.createInstance = function(name) {
-  var _service = new Service(name);
+Service.createInstance = function(waif, name) {
+  var _service = new Service(waif, name);
 
   // called directly
   var fn = function() {

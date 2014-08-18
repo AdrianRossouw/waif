@@ -43,7 +43,6 @@ describe('Service instances', function() {
     should.exist(this.instance.request);
     should.exist(this.instance.start);
     should.exist(this.instance.stop);
-    should.exist(this.instance.forward);
     should.exist(this.instance.use);
     should.exist(this.instance.listen);
   });

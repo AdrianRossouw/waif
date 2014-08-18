@@ -1,19 +1,22 @@
 var http  = require('http');
 var norma = require('norma');
 var debug = require('debug')('waif:pipe');
+var url   = require('url');
 var _     = require('lodash');
 
 module.exports = function() {
   var waif = this;
 
-  var args = norma('url:s', arguments);
-  var url = url.parse(args.url);
+  console.log(this);
 
-  debug('service %s piped to %s', this.service.name, url.hostname);
+  var args = norma('url:s', arguments);
+  var _url = url.parse(args.url);
+
+  debug('service %s piped to %s', this.service.name, _url.hostname);
 
   return function(req, res, next) {
     var options = {
-      hostname: url.hostname,
+      hostname: _url.hostname,
       method: req.method,
       path: req.url,
       headers: req.headers

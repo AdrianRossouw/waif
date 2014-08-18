@@ -17,7 +17,7 @@ describe('request local service', function() {
       .listen();
 
     this.proxy = waif('proxy')
-      .use(pipe(this.service.requestUrl()));
+      .use(pipe, this.service.requestUrl());
 
     waif.start();
   });

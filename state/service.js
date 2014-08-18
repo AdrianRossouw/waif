@@ -21,11 +21,10 @@ var Status       = require('./status');
 * services that have been mounted onto the
 * system.
 */
-function Service(waif, name) {
+function Service(name) {
   debug('new service: %s', name);
   assert(name, "service not supplied with name");
 
-  this.waif       = waif;
   this.name       = name;
   this.middleware = [];
   this.uri        = new Uri();
@@ -55,42 +54,50 @@ Service.prototype.initialize = function() {
         this.status.state().go('start');
       } 
     }),
-    Listening: state({
-      start: function() {
-        debug('start listening on service: %s', this.name);
+    Listening: state,
+    start: function() {
+      debug('start listening on service: %s', this.name);
 
-        // new express server
-        this.server = express();
+      // new express server
+      this.server = express();
 
-        // mount middleware
-        _(this.middleware).each(this.mount, this);
+      // mount middleware
+      _(this.middleware).each(this.mount, this);
 
-        // listen on whatever url we need to
-        var listenArgs = this.uri.listenUrl();
-        listenArgs.push(listenFn.bind(this));
-        this.server.listen.apply(this.server, listenArgs);
+      // listen on whatever url we need to
+      var listenArgs = this.uri.listenUrl();
+      listenArgs.push(listenFn.bind(this));
+      this.server.listen.apply(this.server, listenArgs);
 
-        return this;
+      return this;
 
-        //// helpers
-        function listenFn(err) {
-          debug('%s: start listening on %o', this.name, this.uri.get());
-          this.emit('start');
-          this.status.state().go('Running');
-        }
-
-      },
-      stop: function() {
-        debug('%s: stop forwarding to %s', this.name, this.uri.get());
-        this.emit('stop');
-        this.status.state().go('start');
-      }, 
-      
-      mount: function mount(mw) {
-        this.server.use.apply(this.server, mw);
+      //// helpers
+      function listenFn(err) {
+        debug('%s: start listening on %o', this.name, this.uri.get());
+        this.emit('start');
+        this.status.state().go('Running');
       }
 
-    }),
+    },
+    stop: function() {
+      debug('%s: stop forwarding to %s', this.name, this.uri.get());
+      this.emit('stop');
+      this.status.state().go('start');
+    }, 
+
+    mount: function mount(mw) {
+      var _args = [];
+      mw.path && _args.push(mw.path);
+      _args.push(_initHandler(mw));
+      this.server.use.apply(this.server, _args);
+
+      function _initHandler(mw) {
+        if (!mw.opts) { return mw.handler; }
+        var context = Object.create(this.waif, { service: this });
+        return mw.handler.call(context, mw.opts);
+      }
+    },
+
     forward: function(url) {
       this.state().go('Forwarding');
       this.uri.set(url);
@@ -117,12 +124,11 @@ Service.prototype.initialize = function() {
     },
 
     use: function() {
-      var args = norma('s?, f, o?}', arguments);
-      this.middleware.push(_.compact(args));
+      var args = norma('{path:s?, handler:f, options:.*}', arguments);
+      this.middleware.push(args);
       debug('use middlware on service: %s', this.name);
       return this;
-    },
-    mount: noopFn
+    }
 
   });
 };

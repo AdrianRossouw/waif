@@ -82,8 +82,10 @@ Service.prototype.mount = function mount(mw) {
 
   function _initHandler(mw) {
     if (!mw.options) { return mw.handler; }
-    var context = Object.create(this.waif);
-    context.service = this;
+    var context = {
+      waif: this.waif,
+      service: this
+    };
     return mw.handler.call(context, mw.options);
   }
 };

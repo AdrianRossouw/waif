@@ -24,7 +24,7 @@ Waif.prototype.service = function() {
 
   debug('service', args);
   if (!this._services[name]) {
-    this._services[name] = Service.createInstance(this, name);
+    this._services[name] = Service.createInstance(name, this);
   }
   return this._services[name];
 };

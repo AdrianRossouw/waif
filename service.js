@@ -125,7 +125,7 @@ Service.prototype.request = function() {
 // to allow you to get notifications of
 // start, stop and configure.
 
-Service.createInstance = function(waif, name) {
+Service.createInstance = function(name, waif) {
   var _service = new Service(name);
   _service.setWaif(waif);
 

@@ -33,7 +33,7 @@ describe('Service module', function() {
 
 describe('Service instances', function() {
   before(function() {
-    this.instance = Service.createInstance('test-service');
+    this.instance = Service.createInstance('test-service', waif);
   });
   it('should create an instance', function() {
     should.exist(this.instance);

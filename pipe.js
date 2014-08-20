@@ -1,35 +1,27 @@
 var http  = require('http');
 var norma = require('norma');
+var request = require('request');
 var debug = require('debug')('waif:pipe');
 var url   = require('url');
 var _     = require('lodash');
 
-module.exports = function() {
-  var waif = this;
-
-  console.log(this);
-
+module.exports = function(config) {
   var args = norma('url:s', arguments);
-  var _url = url.parse(args.url);
 
-  debug('service %s piped to %s', this.service.name, _url.hostname);
+  var waif = this;
+  var r = request.defaults({proxy: args.url});
+  this.forward(args.url);
+  console.log(this.service.state().name);
+
+  debug('service %s piped to %s', waif.service.name, args.url);
 
   return function(req, res, next) {
-    var options = {
-      hostname: _url.hostname,
-      method: req.method,
-      path: req.url,
-      headers: req.headers
-    };
+    debug('service %s piping to %s', waif.service.name, req.url);
+    var reqUrl= waif.service.uri.requestUrl(req.url);
+    if (!reqUrl) { return next(); }
 
-    debug('service %s piping to %s, opts: %o', 
-      this.service.name, req.hostname, options);
-
-    var proxy = http.request(options, function(proxyRes) {
-      res.writeHead(proxyRes.statusCode, proxyRes.headers);
-      proxyRes.pipe(res, { end: true });
-    });
-
-    req.pipe(proxy, { end: true });
+    var x = r(reqUrl, console.log.bind(console));
+    req.pipe(x);
+    x.pipe(res);
   };
 };

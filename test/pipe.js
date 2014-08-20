@@ -13,7 +13,7 @@ describe('request local service', function() {
     waif = Waif.createInstance();
 
     this.service = waif('local')
-      .use(send({msg: 'ok'}))
+      .use(send, {msg: 'ok'})
       .listen();
 
     this.proxy = waif('proxy')
@@ -25,14 +25,12 @@ describe('request local service', function() {
   after(function() { waif.stop(); });
 
 
-  it('piping a request works', function(doneFn) {
-    this.proxy('/filename.jpg')
-      .pipe(through(pipeFn))
-      .on('error', doneFn)
-      .on('close', doneFn);
-
-    function pipeFn(data) {
-      this.queue(data);
-    }
+  it('request works', function(doneFn) {
+    this.proxy('filename.jpg', function(err, resp, body) {
+      if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
+      should.exist(body);
+      body.should.have.property('msg', 'ok');
+      doneFn();
+    });
   });
 });

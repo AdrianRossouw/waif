@@ -24,7 +24,7 @@ Waif.prototype.service = function() {
 
   debug('service', args);
   if (!this._services[name]) {
-    this._services[name] = Service.createInstance(name, this);
+    this._services[name] = Service.createInstance(name, this.accessor);
   }
   return this._services[name];
 };
@@ -57,7 +57,7 @@ Waif.createInstance = function() {
   fn.createInstance = Waif.createInstance;
   fn.start = _waif.start.bind(_waif);
   fn.stop = _waif.stop.bind(_waif);
-
+  _waif.accessor = fn;
   return fn;
 };
 
@@ -78,4 +78,3 @@ function _makeExport() {
   fn.createInstance = Waif.createInstance;
   return fn;
 }
-

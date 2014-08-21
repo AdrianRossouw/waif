@@ -51,9 +51,11 @@ Service.prototype.start = function () {
   _(this.middleware).each(this.mount, this);
 
   // listen on whatever url we need to
-  var listenArgs = this.uri.listenUrl();
-  listenArgs.push(listenFn.bind(this));
-  this.server.listen.apply(this.server, listenArgs);
+  if (this.listening) {
+    var listenArgs = this.uri.listenUrl();
+    listenArgs.push(listenFn.bind(this));
+    this.server.listen.apply(this.server, listenArgs);
+  }
 
   return this;
 
@@ -98,11 +100,12 @@ Service.prototype.use = function() {
 };
 
 Service.prototype.forward = function(url) {
-  this.uri.set(url);
-  return this;
+  console.log("Forward has been deprecated.");
+  console.log("Instead do '.use(pipe, \"http://domain.com\").listen()'");
 };
 
 Service.prototype.listen = function(url) {
+  this.listening = true;
   this.uri.set(url);
   return this;
 };

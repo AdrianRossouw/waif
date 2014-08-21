@@ -1,23 +1,16 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 var Waif    = require('../');
-var pipe    = require('../pipe');
-var send    = require('../send');
+var wrap    = require('../wrap');
 var should  = require('should');
-var through = require('through');
 
-
-describe('pipe service', function() {
+describe('wrap middleware', function() {
   var waif = null;
 
   before(function() {
     waif = Waif.createInstance();
 
     this.service = waif('local')
-      .use(send, {msg: 'ok'})
-      .listen(3002);
-
-    this.proxy = waif('proxy')
-      .use(pipe, this.service.requestUrl())
+      .use(wrap, middleware)
       .listen();
 
     waif.start();
@@ -25,9 +18,8 @@ describe('pipe service', function() {
 
   after(function() { waif.stop(); });
 
-
   it('request works', function(doneFn) {
-    this.proxy('filename.jpg', function(err, resp, body) {
+    this.proxy('', function(err, resp, body) {
       if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
       should.exist(body);
       body.should.have.property('msg', 'ok');
@@ -35,3 +27,7 @@ describe('pipe service', function() {
     });
   });
 });
+
+function middleware(req, res, next) {
+  req.send({msg: 'ok'});
+}

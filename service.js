@@ -86,12 +86,12 @@ Service.prototype.mount = function mount(mw) {
       waif: this.waif,
       service: this
     };
-    return mw.handler.call(context, mw.options);
+    return mw.handler.apply(context, mw.options);
   }
 };
 
 Service.prototype.use = function() {
-  var args = norma('{path:s?, handler:f, options:o|s|n?}', arguments);
+  var args = norma('{path:s?, handler:f, options:.*}', arguments);
   this.middleware.push(args);
   debug('use middlware on service: %s', this.name);
   return this;

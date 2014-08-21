@@ -33,10 +33,13 @@ you will use, and where they will be accessed.
 // get an instance of waif
 var waif = require('waif')();
 
-// used to proxy to other addresses
+// wrap standard middleware
+var wrap = require('waif/wrap');
+
+// proxy to other addresses
 var pipe = require('waif/pipe');
 
-// used to return content verbatim
+// return content verbatim
 var send = require('waif/send');
 
 waif('user')
@@ -45,6 +48,7 @@ waif('user')
 
 wait('my-service')
   .use('/ping', send, 'pong')
+  .use(wrap, myLogMiddleware)
   .use(require('./src/my-service'))
   .listen(3000);
 ```

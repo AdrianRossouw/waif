@@ -101,8 +101,9 @@ Service.prototype.use = function() {
 };
 
 Service.prototype.pipe = function() {
-  var args = norma('{path:s?, options:.*}', arguments);
+  var args = norma('{path:s?, url:s}', arguments);
   args.handler = pipe;
+  args.options = [args.url];
   this.middleware.push(args);
   return this;
 };

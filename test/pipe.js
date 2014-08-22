@@ -17,7 +17,7 @@ describe('pipe service', function() {
       .listen(3002);
 
     this.proxy = waif('proxy')
-      .use(pipe, this.service.requestUrl())
+      .pipe(this.service.requestUrl())
       .listen();
 
     waif.start();

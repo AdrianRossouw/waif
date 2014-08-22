@@ -6,7 +6,7 @@ var Uri   = require('./state/uri');
 module.exports = function(config) {
   var service = this.service;
 
-  var args = norma('url:s', arguments);
+  var args = norma('url:s, rest:.*', arguments);
   debug('service %s piped to %s', service.name, args.url);
 
   var _uri = new Uri();

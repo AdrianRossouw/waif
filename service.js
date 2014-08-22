@@ -10,6 +10,8 @@ var util         = require('util');
 
 var Uri          = require('./state/uri');
 var Status       = require('./state/status');
+var send         = require('./send');
+var pipe         = require('./pipe');
 
 /**
 * Service constructor.
@@ -98,6 +100,20 @@ Service.prototype.use = function() {
   return this;
 };
 
+Service.prototype.pipe = function() {
+  var args = norma('{path:s?, options:.*}', arguments);
+  args.handler = pipe;
+  this.middleware.push(args);
+  return this;
+};
+
+Service.prototype.send = function() {
+  var args = norma('{path:s?, options:.*}', arguments);
+  args.handler = send;
+  this.middleware.push(args);
+  return this;
+};
+
 Service.prototype.forward = function(url) {
   console.log("Forward has been deprecated.");
   console.log("Instead do '.use(pipe, \"http://domain.com\").listen()'");
@@ -143,7 +159,9 @@ Service.createInstance = function(name, waif) {
   fn.instance = _service;
 
   var proxyMethods = [
-    'request', 'listen', 'use', 'start', 'stop', 'on'
+    'request', 'listen',
+    'use', 'send', 'pipe',
+    'start', 'stop', 'on',
   ];
 
   _(proxyMethods).each(function(method) {

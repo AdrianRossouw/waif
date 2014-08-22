@@ -16,11 +16,14 @@ describe('send a response', function() {
       .use(send, {msg: 'ok'})
       .listen();
 
+    waif('helper')
+      .send('/helper', {msg: 'works'})
+      .listen();
+
     waif.start();
   });
 
   after(function() { waif.stop(); });
-
 
   it('can send pong', function(doneFn) {
     var ping = waif('ping');
@@ -46,5 +49,15 @@ describe('send a response', function() {
     }
   });
 
+  it('can use helper method', function(doneFn) {
+    var helper = waif('helper');
+
+    helper('helper', test);
+
+    function test(err, resp, body) {
+      body.should.have.property('msg', 'works');
+      doneFn();
+    }
+  });
 });
 

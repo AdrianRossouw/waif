@@ -9,11 +9,11 @@ describe('send a response', function() {
   before(function() {
     waif = Waif.createInstance();
     waif('ping')
-      .use(send('pong'))
+      .use(send, 'pong')
       .listen();
 
     waif('json')
-      .use(send({msg: 'ok'}))
+      .use(send, {msg: 'ok'})
       .listen();
 
     waif.start();

@@ -83,12 +83,11 @@ Service.prototype.mount = function mount(mw) {
   this.server.use.apply(this.server, _args);
 
   function _initHandler(mw) {
-    if (!mw.options) { return mw.handler; }
     var context = {
       waif: this.waif,
       service: this
     };
-    return mw.handler.apply(context, mw.options);
+    return mw.handler.apply(context, mw.options || {});
   }
 };
 
@@ -118,6 +117,7 @@ Service.prototype.request = function() {
 
   opts.uri = this.uri.requestUrl(path);
   opts.url = null;
+
 
   _.defaults(opts, { json: true });
 

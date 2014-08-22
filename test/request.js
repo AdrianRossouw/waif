@@ -50,7 +50,8 @@ describe('request local service', function() {
 });
 
 //// Helpers
-
-function _middleware(req, res, next) {
-  res.send({msg: 'ok'});
+function _middleware() {
+  return function(req, res, next) {
+    res.send({msg: 'ok'});
+  };
 }

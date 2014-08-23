@@ -38,7 +38,13 @@ Uri.prototype.initialize = function() {
         Initial: function() { return _.isNumber(this.owner.input); }
       },
       arrive: function() {
-        this.url = url.parse('http://0.0.0.0:' + this.input);
+        this.setPort(this.input);
+      },
+      setPort: function(port) {
+        this.url = url.parse('http://0.0.0.0:'+port);
+      },
+      listenUrl: function() {
+        return [this.input];
       }
     }),
 
@@ -57,14 +63,13 @@ Uri.prototype.initialize = function() {
       },
       arrive: function() {
         this.filename = this.input || temp.path();
-        this.url = url.parse('unix:/' + this.filename);
+        this.url = 'unix:/' + this.filename;
       },
       getFilename: function() {
         return this.filename;
       },
-
-      _joinPath: function() {
-        return path.join.apply(path, arguments);
+      requestUrl: function(_path) {
+        return 'unix:/' + path.join(this.filename, _path || '');
       },
       listenUrl: function() {
         return [this.filename];
@@ -78,23 +83,10 @@ Uri.prototype.initialize = function() {
 
     // append the request path.
     requestUrl: function() {
-      var args = norma('path:s? opts:o?', arguments);
-      var path = args.path || '';
-      var opts = args.opts || {};
-
-      var _url = _.clone(this.url);
-
-      _.defaults(_url, opts);
-
-      var _path = opts.path || opts.pathname || path;
-      _path = _path.replace(/^\//, '');
-
-      _url.path = _url.pathname = this._joinPath(_url.path, _path);
-
-      return url.format(_url);
-    },
-    _joinPath: function() {
-        return url.resolve.apply(url, arguments);
+      var args = norma('path:s?', arguments);
+      var _url = url.format(_.clone(this.url));
+      var _path = (args.path || '').replace(/^\//, '');
+      return url.resolve(_url, _path);
     },
     // always returns an array
     // due to http.listen(3000, '10.0.0.1');
@@ -102,7 +94,9 @@ Uri.prototype.initialize = function() {
       var results = [parseInt(this.url.port, 10)];
       this.url.hostname && results.push(this.url.hostname);
       return results;
-    }
+    },
+
+    setPort: function() {}
   });
 };
 

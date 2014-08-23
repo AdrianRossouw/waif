@@ -91,7 +91,6 @@ describe('request urls', function() {
     uri.requestUrl().should.equal(socket);
     uri.requestUrl('path').should.equal(socket + '/path');
     uri.requestUrl('/path').should.equal(socket + '/path');
-    uri.requestUrl({pathname: '/1234'}).should.equal(socket + '/1234');
   });
 
   it('ports should give valid urls', function() {
@@ -132,7 +131,6 @@ describe('listen urls', function() {
   it('ports should give valid urls', function() {
     uri.set(3000);
     uri.listenUrl()[0].should.equal(3000);
-    uri.listenUrl()[1].should.equal("0.0.0.0");
   });
 
 

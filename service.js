@@ -56,7 +56,7 @@ Service.prototype.start = function () {
   if (this.listening) {
     var listenArgs = this.uri.listenUrl();
     listenArgs.push(listenFn.bind(this));
-    this.server.listen.apply(this.server, listenArgs);
+    var instance = this.server.listen.apply(this.server, listenArgs);
   }
 
   return this;
@@ -64,6 +64,7 @@ Service.prototype.start = function () {
   //// helpers
   function listenFn(err) {
     debug('%s: start listening on %o', this.name, this.uri.get());
+    this.uri.setPort(instance.address().port);
     this.emit('start');
     this.status.state().go('Running');
   }
@@ -134,7 +135,6 @@ Service.prototype.request = function() {
 
   opts.uri = this.uri.requestUrl(path);
   opts.url = null;
-
 
   _.defaults(opts, { json: true });
 

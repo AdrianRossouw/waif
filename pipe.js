@@ -1,7 +1,8 @@
-var norma = require('norma');
-var request = require('request');
-var debug = require('debug')('waif:pipe');
-var Uri   = require('./state/uri');
+var norma     = require('norma');
+var request   = require('request');
+var debug     = require('debug')('waif:pipe');
+var Uri       = require('./state/uri');
+var pathToUrl = require('path-to-url');
 
 module.exports = function(config) {
   var service = this.service;
@@ -12,10 +13,7 @@ module.exports = function(config) {
   return function(req, res, next) {
     debug('service %s piping to %s', service.name, req.url);
 
-    var proxyUrl = args.url;
-    Object.keys(req.params).forEach(function(key) {
-      proxyUrl = proxyUrl.replace(':' + key, req.params[key]);
-    });
+    var proxyUrl = pathToUrl(args.url, req.params);
 
     var uri = new Uri();
     uri.set(proxyUrl);

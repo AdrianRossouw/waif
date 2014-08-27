@@ -41,7 +41,6 @@ describe('pipe service', function() {
 
   it('allows parameter restructuring', function(doneFn) {
     this.proxyParams('mike/bike', function(err, resp, body) {
-      console.log(resp)
       if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
       should.exist(body);
       body.should.have.property('msg', 'ok');

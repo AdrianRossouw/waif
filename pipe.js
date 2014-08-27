@@ -11,9 +11,10 @@ module.exports = function(config) {
   debug('service %s piped to %s', service.name, args.url);
 
   return function(req, res, next) {
-    debug('service %s piping to %s', service.name, req.url);
 
-    var proxyUrl = pathToUrl(args.url, req.params);
+    var proxyUrl = pathToUrl(args.url, req.params) + req.url;
+
+    debug('service %s piping to %s', service.name, proxyUrl);
 
     var uri = new Uri();
     uri.set(proxyUrl);

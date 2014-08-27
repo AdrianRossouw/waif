@@ -20,8 +20,6 @@ module.exports = function(config) {
     var uri = new Uri();
     uri.set(proxyUrl);
 
-    console.log(proxyUrl)
-
     var proxy = request(uri.requestUrl(proxyUrl));
     req.pipe(proxy);
     proxy.pipe(res);

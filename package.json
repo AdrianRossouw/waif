@@ -1,6 +1,6 @@
 {
   "name": "waif",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "a micro-microservices library",
   "main": "waif.js",
   "scripts": {

@@ -20,6 +20,10 @@ describe('pipe service', function() {
       .pipe(this.service.requestUrl())
       .listen();
 
+    this.proxyParams = waif('proxyParams')
+      .pipe('/:foo/:bar', this.service.requestUrl() + ':bar/:foo')
+      .listen();
+
     waif.start();
   });
 
@@ -28,6 +32,15 @@ describe('pipe service', function() {
 
   it('request works', function(doneFn) {
     this.proxy('filename.jpg', function(err, resp, body) {
+      if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
+      should.exist(body);
+      body.should.have.property('msg', 'ok');
+      doneFn();
+    });
+  });
+
+  it('allows parameter restructuring', function(doneFn) {
+    this.proxyParams('mike/bike', function(err, resp, body) {
       if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
       should.exist(body);
       body.should.have.property('msg', 'ok');

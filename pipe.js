@@ -9,14 +9,19 @@ module.exports = function(config) {
   var args = norma('url:s, rest:.*', arguments);
   debug('service %s piped to %s', service.name, args.url);
 
-  var _uri = new Uri();
-  _uri.set(args.url);
-
   return function(req, res, next) {
     debug('service %s piping to %s', service.name, req.url);
 
-    var x = request(_uri.requestUrl(req.url));
-    req.pipe(x);
-    x.pipe(res);
+    var proxyUrl = args.url;
+    Object.keys(req.params).forEach(function(key) {
+      proxyUrl = proxyUrl.replace(':' + key, req.params[key]);
+    });
+
+    var uri = new Uri();
+    uri.set(proxyUrl);
+
+    var proxy = request(uri.requestUrl(proxyUrl));
+    req.pipe(proxy);
+    proxy.pipe(res);
   };
 };

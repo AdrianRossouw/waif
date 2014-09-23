@@ -1,12 +1,9 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 var should = require('should');
-var sinon = require('sinon');
 var through = require('through');
 var _ =  require('lodash');
 
 var Waif = require('../');
-
-var spy = sinon.spy(_middleware);
 
 describe('request local service', function() {
   var waif = null;
@@ -21,8 +18,6 @@ describe('request local service', function() {
   });
 
   after(function() { waif.stop(); });
-
-  afterEach(function() { spy.reset(); });
 
   it('request helper', function(doneFn) {
     var local = waif('local');

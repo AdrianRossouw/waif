@@ -30,12 +30,13 @@
     "is-url": "^1.1.0",
     "lodash": "^2.4.1",
     "norma": "^0.2.6",
+    "path-to-url": "^0.1.0",
     "request": "^2.37.0",
     "sinon": "^1.10.3",
     "state": "^0.2.0",
     "temp": "^0.8.0",
     "through": "^2.3.4",
-    "utils-merge": "^1.0.0",
-    "path-to-url": "^0.1.0"
+    "through2": "^0.6.2",
+    "utils-merge": "^1.0.0"
   }
 }

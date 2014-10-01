@@ -20,7 +20,12 @@ module.exports = function(config) {
     uri.set(proxyUrl);
 
     var proxy = request(uri.requestUrl(proxyUrl));
+    //proxy.on('error', errorHandler);
     req.pipe(proxy);
     proxy.pipe(res);
+
+    function errorHandler(err) {
+      return res.status(500).send(err);
+    }
   };
 };

@@ -19,7 +19,7 @@ describe('wrap middleware', function() {
   after(function() { waif.stop(); });
 
   it('request works', function(doneFn) {
-    this.proxy('', function(err, resp, body) {
+    this.service('', function(err, resp, body) {
       if (err || resp.statusCode !== 200) { return doneFn(resp.statusCode); }
       should.exist(body);
       body.should.have.property('msg', 'ok');
@@ -29,5 +29,5 @@ describe('wrap middleware', function() {
 });
 
 function middleware(req, res, next) {
-  req.send({msg: 'ok'});
+  res.send({msg: 'ok'});
 }

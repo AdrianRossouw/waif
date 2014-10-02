@@ -20,9 +20,8 @@ describe('headers can be configured', function() {
       .listen(3006);
 
     waif('proxy')
-      .pipe('http://localhost:3006', {
-        headers: { 'proxy-header': 'doremi'}
-      })
+      .pipe('/path/:something/here', 'http://localhost/here/:something/path', { redirect: true })
+      .pipe('http://localhost:3006', { headers: { 'proxy-header': 'doremi'} })
       .listen(0);
 
     waif.start();
@@ -60,13 +59,29 @@ describe('headers can be configured', function() {
   });
 
   it('proxy header', function(doneFn) {
-    var local = waif('proxy');
+    var proxy = waif('proxy');
 
-    local('/path/here', test);
+    proxy('/path/here', test);
     function test(err, resp, body) {
       request.headers.should.have.property('host', 'localhost');
       request.headers.should.have.property('proxy-header', 'doremi');
       should.not.exist(err);
+
+      doneFn();
+    }
+  });
+
+  it('proxy redirect', function(doneFn) {
+    var proxy = waif('proxy');
+    var opts = {
+      url: '/path/goes/here',
+      followRedirect: false
+    };
+    proxy(opts, test);
+    function test(err, resp, body) {
+      should.not.exist(err);
+      resp.statusCode.should.equal(301);
+      resp.headers.should.have.property('location', 'http://localhost/here/goes/path/');
 
       doneFn();
     }

@@ -23,6 +23,10 @@ module.exports = function(config) {
 
     var reqUrl = uri.requestUrl(proxyUrl);
 
+    if (args.opts && args.opts.redirect) {
+      return res.redirect(301, reqUrl);
+    }
+
     var opts = {
       url: reqUrl,
       headers: {

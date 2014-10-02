@@ -1,13 +1,10 @@
-__THIS LIBRARY IS IN THE FIRST STAGES OF DEVELOPMENT.  
-DO NOT EXPECT IT TO WORK AT ALL YET.__
-
 ## Waif
 
 Waif provides the smallest possible abstraction that would allow you to  
 to write an express-based microservice that can be used as a local library  
 or a remote instance.  
 
-__Waif is developed by [Wayfinder](http://wayfinder.co) and is (almost) being  
+__Waif is developed by [Wayfinder](http://wayfinder.co) and is being  
 used in production where we deploy our services using [Longshoreman](http://longshoreman.io).__
 
 ### How it works
@@ -26,7 +23,6 @@ Each microservice can be used and re-used in many different contexts,
 therefor there is a separate step where you configure all the services
 you will use, and where they will be accessed.
 
-
 ```javascript
 // file: production.js
 
@@ -36,20 +32,16 @@ var waif = require('waif')();
 // wrap standard middleware
 var wrap = require('waif/wrap');
 
-// proxy to other addresses
-var pipe = require('waif/pipe');
-
-// return content verbatim
-var send = require('waif/send');
-
+// maps to external service, on a random local port.
 waif('user')
-  .use(pipe, 'http://user.example.com/v3');
-  .listen();
+  .pipe('/user/:id', 'http://user.example.com/v3/:id')
+  .listen(0);
 
+var service = require('./src/my-service');
 wait('my-service')
-  .use('/ping', send, 'pong')
+  .send('/ping', 'pong')
   .use(wrap, myLogMiddleware)
-  .use(require('./src/my-service'))
+  .use(service, { property: 'value' })
   .listen(3000);
 ```
 

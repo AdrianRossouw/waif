@@ -59,7 +59,15 @@ describe('killing streams mid-way', function() {
 
   // we just close the request after answering it.
   server.on('request', function(req, res, next) {
-    res.socket.end();
+    if (req.url === '/response') {
+      return res.socket.end();
+    }
+    if (req.url === '/server') {
+      server.close();
+    }
+    if (req.url === '/request') {
+      return req.socket.end();
+    }
   });
 
   before(function(done) {
@@ -78,12 +86,32 @@ describe('killing streams mid-way', function() {
 
   after(function() {
     waif.stop();
-    server.close();
   });
 
-  it('should give us a helpful error', function(done) {
-    waif('fails')('test', function(err, resp, body) {
-      console.log(arguments);
+  it('killing a response', function(done) {
+    waif('fails')('response', function(err, resp, body) {
+      should.not.exist(err);
+      resp.statusCode.should.not.eql(200);
+      body.should.have.property('code', 'ECONNRESET');
+      done();
+    });
+  });
+
+  it('killing a request', function(done) {
+    waif('fails')('response', function(err, resp, body) {
+      should.not.exist(err);
+      resp.statusCode.should.not.eql(200);
+      body.should.have.property('code', 'ECONNRESET');
+      done();
+    });
+  });
+
+
+  it.skip('killing the server', function(done) {
+    waif('fails')('server', function(err, resp, body) {
+      should.not.exist(err);
+      resp.statusCode.should.not.eql(200);
+      body.should.have.property('code', 'ECONNRESET');
       done();
     });
   });

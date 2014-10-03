@@ -81,7 +81,7 @@ describe('headers can be configured', function() {
     function test(err, resp, body) {
       should.not.exist(err);
       resp.statusCode.should.equal(301);
-      resp.headers.should.have.property('location', 'http://localhost/here/goes/path/');
+      resp.headers.should.have.property('location', 'http://localhost/here/goes/path');
 
       doneFn();
     }

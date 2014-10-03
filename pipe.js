@@ -21,7 +21,7 @@ module.exports = function(config) {
     var uri = new Uri();
     uri.set(proxyUrl);
 
-    var reqUrl = uri.requestUrl(proxyUrl);
+    var reqUrl = uri.requestUrl(proxyUrl).replace(/\/$/,'');
 
     if (args.opts && args.opts.redirect) {
       return res.redirect(301, reqUrl);

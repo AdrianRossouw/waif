@@ -1,0 +1,14 @@
+{
+  "name": "waif-example",
+  "version": "0.0.1",
+  "description": "waif example",
+  "main": "service.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Adrian Rossouw <adrian@wayfinder.is>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.9.5"
+  }
+}

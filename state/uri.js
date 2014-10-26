@@ -63,13 +63,14 @@ Uri.prototype.initialize = function() {
       },
       arrive: function() {
         this.filename = this.input || temp.path();
-        this.url = 'unix:/' + this.filename;
+        this.url = 'http://unix:' + this.filename+':/';
       },
       getFilename: function() {
         return this.filename;
       },
       requestUrl: function(_path) {
-        return 'unix:/' + path.join(this.filename, _path || '');
+        var noslash = (_path||'').replace(/^\//, '');
+        return 'http://unix:' + this.filename + ":/" + noslash;
       },
       listenUrl: function() {
         return [this.filename];

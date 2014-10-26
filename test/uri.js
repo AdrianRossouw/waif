@@ -85,12 +85,12 @@ describe('request urls', function() {
   it('sockets should give valid urls', function() {
     uri.set();
     var filename = uri.getFilename();
-    var socket = 'unix:/' + filename;
+    var socket = 'http://unix:' + filename + ':/';
     var url = require('url');
     var _url =  url.parse(socket);
     uri.requestUrl().should.equal(socket);
-    uri.requestUrl('path').should.equal(socket + '/path');
-    uri.requestUrl('/path').should.equal(socket + '/path');
+    uri.requestUrl('path').should.equal(socket + 'path');
+    uri.requestUrl('/path').should.equal(socket + 'path');
   });
 
   it('ports should give valid urls', function() {

@@ -4,8 +4,6 @@ Waif provides the smallest possible abstraction that would allow you to
 to write an express-based microservice that can be used as a local library  
 or a remote instance.  
 
-__Waif is developed by [Wayfinder](http://wayfinder.co) and is being  
-used in production where we deploy our services using [Longshoreman](http://longshoreman.io).__
 
 ### How it works
 
@@ -91,3 +89,7 @@ How the configuration gets into Waif is entirely
 up to the developer. It just provides the
 API to declare them, in a way that the services
 don't need to care about it.
+
+### Acknowledgements
+
+__Waif was initially developed by [Wayfinder](http://wayfinder.co) and used to build services deployed with [Longshoreman](http://longshoreman.io).__

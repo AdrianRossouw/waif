@@ -8,18 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/wayfin/waif.git"
+    "url": "git://github.com/adrianrossouw/waif.git"
   },
   "keywords": [
     "rest",
     "microservices"
   ],
-  "author": "Adrian Rossouw (adrian@wayfinder.co)",
+  "author": "Adrian Rossouw (adrian@daemon.co.za)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wayfin/waif/issues"
+    "url": "https://github.com/adrianrossouw/waif/issues"
   },
-  "homepage": "https://github.com/wayfin/waif",
+  "homepage": "https://github.com/adrianrossouw/waif",
   "devDependencies": {
     "mocha": "^1.20.1",
     "should": "^4.0.4"

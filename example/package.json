@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "Adrian Rossouw <adrian@wayfinder.is>",
+  "author": "Adrian Rossouw <adrian@daemon.co.za>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.9.5"
